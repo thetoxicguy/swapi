@@ -11,10 +11,7 @@ export const getPeople = async (page = 1) => {
     return data.data;
   } catch (error) {
     if (error instanceof AxiosError) {
-      // Request made but the server responded with an error
-      console.log(error?.response?.data);
-      console.log(error?.response?.status);
-      console.log(error?.response?.headers);
+      throw new Error(error.message);
     }
   }
 };

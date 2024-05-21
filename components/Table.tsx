@@ -2,6 +2,8 @@ import { getPeople } from '@/services/apiData';
 import { useState, useEffect } from 'react';
 import { DataTable, Text, ActivityIndicator } from 'react-native-paper';
 
+import { usePeople } from '../hooks/usePeople';
+
 type Data = {
   count: string;
   next: string;
@@ -12,17 +14,13 @@ type Data = {
 const Table = () => {
   const [data, setData] = useState<Data | undefined>();
   const [page, setPage] = useState<number>(0);
+  const { isLoadingPeople, people, error, refetch } = usePeople(page + 1);
+
   const from = page * 10;
-  const to = Math.min((page + 1) * 10, Number(data?.count));
+  const to = Math.min((page + 1) * 10, Number(people?.count));
 
   useEffect(() => {
-    const fetchPeople = async () => {
-      const people = await getPeople(page + 1);
-      setData(people);
-    };
-    fetchPeople();
-
-    console.log('Page:', page);
+    refetch();
   }, [page, setPage]);
 
   useEffect(() => {
@@ -33,7 +31,7 @@ const Table = () => {
     );
   }, [data, setData]);
 
-  if (!data) {
+  if (isLoadingPeople) {
     return <ActivityIndicator size={150} />;
   }
 
@@ -46,7 +44,7 @@ const Table = () => {
         <DataTable.Title>Homeworld</DataTable.Title>
       </DataTable.Header>
 
-      {data?.results?.map((item) => (
+      {people?.results?.map((item) => (
         <DataTable.Row key={item.name}>
           <DataTable.Cell>{item.name}</DataTable.Cell>
           <DataTable.Cell>{item.species}</DataTable.Cell>
@@ -57,9 +55,11 @@ const Table = () => {
 
       <DataTable.Pagination
         page={page}
-        numberOfPages={Math.ceil(Number(data?.count) / 10)}
-        onPageChange={(page) => setPage(page)}
-        label={`${from + 1}-${to} of ${data?.count}`}
+        numberOfPages={Math.ceil(Number(people?.count) / 10)}
+        onPageChange={(page) => {
+          setPage(page);
+        }}
+        label={`${from + 1}-${to} of ${people?.count}`}
         numberOfItemsPerPage={10}
         showFastPaginationControls
       />
