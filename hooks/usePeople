@@ -1,0 +1,20 @@
+// import { useContext } from 'react';
+// import { useQuery } from '@tanstack/react-query';
+// import {getPeople} from '../services/apiData'
+
+// // import AppContext from '../contexts/AppContext';
+// // import { getUnits } from '../services/apiFacility';
+
+// export function usePeople(page=1) {
+//   // const { selectedBuilding } = useContext(AppContext);
+//   const {
+//     isLoading,
+//     data: units,
+//     error,
+//   } = useQuery({
+//     queryKey: ['people'],
+//     queryFn: () => getPeople(page),
+//   });
+
+//   return { isLoadingUnits: isLoading, units, error };
+// }

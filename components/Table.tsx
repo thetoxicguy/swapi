@@ -1,73 +1,67 @@
-import * as React from 'react';
-import { DataTable } from 'react-native-paper';
+import { getPeople } from '@/services/apiData';
+import { useState, useEffect } from 'react';
+import { DataTable, Text, ActivityIndicator } from 'react-native-paper';
+
+type Data = {
+  count: string;
+  next: string;
+  previous: string;
+  results: object[];
+};
 
 const Table = () => {
-  const [page, setPage] = React.useState<number>(0);
-  const [numberOfItemsPerPageList] = React.useState([2, 3, 4]);
-  const [itemsPerPage, onItemsPerPageChange] = React.useState(
-    numberOfItemsPerPageList[0]
-  );
+  const [data, setData] = useState<Data | undefined>();
+  const [page, setPage] = useState<number>(0);
+  const from = page * 10;
+  const to = Math.min((page + 1) * 10, Number(data?.count));
 
-  const [items] = React.useState([
-    {
-      key: 1,
-      name: 'Cupcake',
-      calories: 356,
-      fat: 16,
-    },
-    {
-      key: 2,
-      name: 'Eclair',
-      calories: 262,
-      fat: 16,
-    },
-    {
-      key: 3,
-      name: 'Frozen yogurt',
-      calories: 159,
-      fat: 6,
-    },
-    {
-      key: 4,
-      name: 'Gingerbread',
-      calories: 305,
-      fat: 3.7,
-    },
-  ]);
+  useEffect(() => {
+    const fetchPeople = async () => {
+      const people = await getPeople(page + 1);
+      setData(people);
+    };
+    fetchPeople();
 
-  const from = page * itemsPerPage;
-  const to = Math.min((page + 1) * itemsPerPage, items.length);
+    console.log('Page:', page);
+  }, [page, setPage]);
 
-  React.useEffect(() => {
-    setPage(0);
-  }, [itemsPerPage]);
+  useEffect(() => {
+    console.log(
+      'table:',
+      data
+      // data?.results?.map((item) => item.name)
+    );
+  }, [data, setData]);
+
+  if (!data) {
+    return <ActivityIndicator size={150} />;
+  }
 
   return (
     <DataTable>
       <DataTable.Header>
-        <DataTable.Title>Dessert</DataTable.Title>
-        <DataTable.Title numeric>Calories</DataTable.Title>
-        <DataTable.Title numeric>Fat</DataTable.Title>
+        <DataTable.Title>Name</DataTable.Title>
+        <DataTable.Title>Species</DataTable.Title>
+        <DataTable.Title>Birth Year</DataTable.Title>
+        <DataTable.Title>Homeworld</DataTable.Title>
       </DataTable.Header>
 
-      {items.slice(from, to).map((item) => (
-        <DataTable.Row key={item.key}>
+      {data?.results?.map((item) => (
+        <DataTable.Row key={item.name}>
           <DataTable.Cell>{item.name}</DataTable.Cell>
-          <DataTable.Cell numeric>{item.calories}</DataTable.Cell>
-          <DataTable.Cell numeric>{item.fat}</DataTable.Cell>
+          <DataTable.Cell>{item.species}</DataTable.Cell>
+          <DataTable.Cell>{item.birth_year}</DataTable.Cell>
+          <DataTable.Cell>{item.homeworld}</DataTable.Cell>
         </DataTable.Row>
       ))}
 
       <DataTable.Pagination
         page={page}
-        numberOfPages={Math.ceil(items.length / itemsPerPage)}
+        numberOfPages={Math.ceil(Number(data?.count) / 10)}
         onPageChange={(page) => setPage(page)}
-        label={`${from + 1}-${to} of ${items.length}`}
-        numberOfItemsPerPageList={numberOfItemsPerPageList}
-        numberOfItemsPerPage={itemsPerPage}
-        onItemsPerPageChange={onItemsPerPageChange}
+        label={`${from + 1}-${to} of ${data?.count}`}
+        numberOfItemsPerPage={10}
         showFastPaginationControls
-        selectPageDropdownLabel={'Rows per page'}
       />
     </DataTable>
   );
