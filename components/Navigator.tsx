@@ -15,7 +15,7 @@ const Navigator = () => {
         name='People'
         component={People}
         options={{
-          tabBarLabel: 'Home',
+          tabBarLabel: 'People',
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name='human' color={color} size={26} />
           ),
