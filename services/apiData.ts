@@ -1,8 +1,11 @@
 import axios, { AxiosError } from 'axios';
+import applyCaseMiddleware from 'axios-case-converter';
 
-const client = axios.create({
-  baseURL: 'https://swapi.dev/api',
-});
+const client = applyCaseMiddleware(
+  axios.create({
+    baseURL: 'https://swapi.dev/api',
+  })
+);
 
 export const getPeople = async (page = 1) => {
   try {
