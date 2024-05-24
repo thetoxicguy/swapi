@@ -1,8 +1,14 @@
 import { useState, useEffect } from 'react';
-import { ActivityIndicator, Appbar, DataTable } from 'react-native-paper';
+import {
+  HelperText,
+  ActivityIndicator,
+  Appbar,
+  DataTable,
+} from 'react-native-paper';
 
 import { PersonData, PeopleData } from '@/types/model';
 import { usePeople } from '@/hooks/usePeople';
+import Header from '@/components/Header';
 
 const People = () => {
   const [page, setPage] = useState<number>(0);
@@ -18,9 +24,7 @@ const People = () => {
 
   return (
     <>
-      <Appbar.Header>
-        <Appbar.Content title='🌌 StarWars 👥 People' />
-      </Appbar.Header>
+      <Header topic='People' page={page + 1} />
       <DataTable>
         <DataTable.Header>
           <DataTable.Title>🪪 Name</DataTable.Title>
