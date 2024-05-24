@@ -24,7 +24,7 @@ const People = () => {
 
   return (
     <>
-      <Header topic='People' page={page + 1} />
+      <Header topic='People' page={page} />
       <DataTable>
         <DataTable.Header>
           <DataTable.Title>🪪 Name</DataTable.Title>

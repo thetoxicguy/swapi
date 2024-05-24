@@ -4,6 +4,7 @@ import { ActivityIndicator, Appbar, DataTable } from 'react-native-paper';
 import { useSpaceships } from '@/hooks/useSpaceships';
 
 import { SpaceshipData, SpaceshipsData } from '@/types/model';
+import Header from '@/components/Header';
 
 const Spaceships = () => {
   const [page, setPage] = useState<number>(0);
@@ -24,9 +25,7 @@ const Spaceships = () => {
 
   return (
     <>
-      <Appbar.Header>
-        <Appbar.Content title='🌌 StarWars 🚀 Spaceships' />
-      </Appbar.Header>
+      <Header topic='Spaceships' page={page} />
       <DataTable>
         <DataTable.Header>
           <DataTable.Title>🚀 Name</DataTable.Title>
