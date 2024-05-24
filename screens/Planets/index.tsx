@@ -4,6 +4,7 @@ import { ActivityIndicator, Appbar, DataTable } from 'react-native-paper';
 import { usePlanets } from '@/hooks/usePlanets';
 
 import { PlanetData, PlanetsData } from '@/types/model';
+import Header from '@/components/Header';
 
 const Planets = () => {
   const [page, setPage] = useState<number>(0);
@@ -19,9 +20,7 @@ const Planets = () => {
 
   return (
     <>
-      <Appbar.Header>
-        <Appbar.Content title='🌌 StarWars 🪐 Planets' />
-      </Appbar.Header>
+      <Header topic='Planets' page={page} />
       <DataTable>
         <DataTable.Header>
           <DataTable.Title>🌐 Name</DataTable.Title>
